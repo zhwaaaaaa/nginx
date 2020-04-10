@@ -1,2 +1,4 @@
 .idea
 cmake-build-debug
+autom4te.cache
+logs
