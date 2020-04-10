@@ -1,0 +1,1 @@
+# nginx for clion and cmake debug
