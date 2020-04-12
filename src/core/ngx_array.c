@@ -59,6 +59,7 @@ ngx_array_push(ngx_array_t *a)
 
         p = a->pool;
 
+        // 如果array用的是pool最后一块内存，则直接把这块内存扩大。
         if ((u_char *) a->elts + size == p->d.last
             && p->d.last + a->size <= p->d.end)
         {
@@ -72,6 +73,7 @@ ngx_array_push(ngx_array_t *a)
 
         } else {
             /* allocate a new array */
+            // 否则就新申请一块2倍的内存
 
             new = ngx_palloc(p, 2 * size);
             if (new == NULL) {

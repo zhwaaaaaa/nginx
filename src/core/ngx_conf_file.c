@@ -351,7 +351,12 @@ done:
     return NGX_CONF_OK;
 }
 
-
+/**
+ * 根据找到的命令执行相关set参数的方法
+ * @param cf
+ * @param last
+ * @return
+ */
 static ngx_int_t
 ngx_conf_handler(ngx_conf_t *cf, ngx_int_t last)
 {

@@ -132,6 +132,12 @@ ngx_palloc(ngx_pool_t *pool, size_t size)
 }
 
 
+/**
+ * 从pool总分配一块内存。如果是小内存（小于每个节点大小）。直接使用链表内存。如果是大内存。需要再malloc，放到large字段
+ * @param pool 内存池头节点
+ * @param size 从内存池分配内存
+ * @return 分配到的内存
+ */
 void *
 ngx_pnalloc(ngx_pool_t *pool, size_t size)
 {
@@ -173,7 +179,13 @@ ngx_palloc_small(ngx_pool_t *pool, size_t size, ngx_uint_t align)
     return ngx_palloc_block(pool, size);
 }
 
-
+/**
+ *
+ * 申请一个新的ngx_pool_t。大小与 pool一致，作为pool的下一个节点。标记使用位置为size。
+ * @param pool pool的头节点。
+ * @param size 新节点已经使用的大小
+ * @return 新节点的内存
+ */
 static void *
 ngx_palloc_block(ngx_pool_t *pool, size_t size)
 {

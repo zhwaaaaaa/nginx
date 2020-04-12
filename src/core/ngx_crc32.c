@@ -102,6 +102,10 @@ uint32_t  ngx_crc32_table256[] = {
 uint32_t *ngx_crc32_table_short = ngx_crc32_table16;
 
 
+/**
+ * 检查crc表是不是和cpu缓存行对齐了，如果没有对其。则需要分配一块和缓存行对其的内存
+ * @return
+ */
 ngx_int_t
 ngx_crc32_table_init(void)
 {

@@ -27,7 +27,14 @@ void ngx_array_destroy(ngx_array_t *a);
 void *ngx_array_push(ngx_array_t *a);
 void *ngx_array_push_n(ngx_array_t *a, ngx_uint_t n);
 
-
+/**
+ * 从pool中申请内存，作为数组的元素。
+ * @param array 要初始化的数组
+ * @param pool 申请内存的pool
+ * @param n 数组个长度
+ * @param size 每个元素的内存大小
+ * @return OK
+ */
 static ngx_inline ngx_int_t
 ngx_array_init(ngx_array_t *array, ngx_pool_t *pool, ngx_uint_t n, size_t size)
 {

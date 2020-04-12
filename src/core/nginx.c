@@ -254,6 +254,7 @@ main(int argc, char *const *argv)
         return 1;
     }
 
+    // 把參數拷貝一份，保存到全局变量ngx_argv中
     if (ngx_save_argv(&init_cycle, argc, argv) != NGX_OK) {
         return 1;
     }

@@ -164,6 +164,7 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
         n = 1;
     }
 
+    // list 是单链表，存了last节点和next节点
     if (ngx_list_init(&cycle->shared_memory, pool, n, sizeof(ngx_shm_zone_t))
         != NGX_OK)
     {
@@ -224,10 +225,17 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
             continue;
         }
 
+        ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
+                      ngx_close_file_n "module %s is core module", cycle->modules[i]->name);
+
         module = cycle->modules[i]->ctx;
 
         if (module->create_conf) {
             rv = module->create_conf(cycle);
+
+            ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
+                          ngx_close_file_n "module %s create_conf", cycle->modules[i]->name);
+
             if (rv == NULL) {
                 ngx_destroy_pool(pool);
                 return NULL;
