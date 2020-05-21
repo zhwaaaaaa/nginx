@@ -304,6 +304,7 @@ main(int argc, char *const *argv) {
     }
 
     // 计算最大模块数 = 已编译模块数 + 128 。 为什么+128尚不清楚
+    // 把给每个模块设置index和name属性
     if (ngx_preinit_modules() != NGX_OK) {
         return 1;
     }

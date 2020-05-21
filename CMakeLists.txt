@@ -199,6 +199,8 @@ include_directories(src/core src/event src/event/modules src/os/unix objs)
 
 include_directories(src/http src/http/modules)
 
-add_executable(nginx src/core/nginx.c objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES})
+set(CORE_MOD_FILES my_mod/my_test_module.c)
+
+add_executable(nginx src/core/nginx.c objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES} ${CORE_MOD_FILES})
 
 target_link_libraries(nginx dl pthread crypt pcre z)

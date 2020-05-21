@@ -227,7 +227,7 @@ ngx_init_cycle(ngx_cycle_t *old_cycle)
         }
 
         ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
-                      ngx_close_file_n "module %s is core module", cycle->modules[i]->name);
+                      ngx_close_file_n "module %s is core module,index=%d", cycle->modules[i]->name, cycle->modules[i]->index);
 
         module = cycle->modules[i]->ctx;
 
