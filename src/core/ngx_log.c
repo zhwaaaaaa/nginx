@@ -451,6 +451,7 @@ ngx_log_redirect_stderr(ngx_cycle_t *cycle)
     fd = ngx_log_get_file_log(cycle->log)->file->fd;
 
     if (fd != ngx_stderr) {
+        // dup2(fd, STDERR_FILENO) 执行之后，
         if (ngx_set_stderr(fd) == NGX_FILE_ERROR) {
             ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,
                           ngx_set_stderr_n " failed");

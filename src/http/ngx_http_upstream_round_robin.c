@@ -502,7 +502,10 @@ failed:
 
     return NGX_BUSY;
 }
-
+//  3    3
+//  5    10
+//  9    0
+//  17 - 9
 
 static ngx_http_upstream_rr_peer_t *
 ngx_http_upstream_get_peer(ngx_http_upstream_rr_peer_data_t *rrp)

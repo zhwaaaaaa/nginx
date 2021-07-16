@@ -61,6 +61,7 @@ set(NGX_CORE_DEPS src/core/nginx.h
         src/os/unix/ngx_process_cycle.h
         src/os/unix/ngx_linux_config.h
         src/os/unix/ngx_linux.h
+        src/event/ngx_event_openssl.h
         src/core/ngx_regex.h
         objs/ngx_auto_config.h)
 
@@ -73,7 +74,10 @@ set(NGX_HTTP_FILES src/http/ngx_http.h
         src/http/ngx_http_script.h
         src/http/ngx_http_upstream.h
         src/http/ngx_http_upstream_round_robin.h
-        src/http/modules/ngx_http_ssi_filter_module.h)
+        src/http/modules/ngx_http_ssi_filter_module.h
+        src/http/v2/ngx_http_v2.h
+        src/http/v2/ngx_http_v2_module.h
+        src/http/modules/ngx_http_ssl_module.h)
 
 set(NGX_C_FILES src/core/nginx.c
         src/core/ngx_log.c
@@ -142,6 +146,8 @@ set(NGX_C_FILES src/core/nginx.c
         src/os/unix/ngx_linux_init.c
         src/event/modules/ngx_epoll_module.c
         src/os/unix/ngx_linux_sendfile_chain.c
+        src/event/ngx_event_openssl.c
+        src/event/ngx_event_openssl_stapling.c
         src/core/ngx_regex.c
         src/http/ngx_http.c
         src/http/ngx_http_core_module.c
@@ -158,6 +164,7 @@ set(NGX_C_FILES src/core/nginx.c
         src/http/ngx_http_write_filter_module.c
         src/http/ngx_http_header_filter_module.c
         src/http/modules/ngx_http_chunked_filter_module.c
+        src/http/v2/ngx_http_v2_filter_module.c
         src/http/modules/ngx_http_range_filter_module.c
         src/http/modules/ngx_http_gzip_filter_module.c
         src/http/ngx_http_postpone_filter_module.c
@@ -167,6 +174,12 @@ set(NGX_C_FILES src/core/nginx.c
         src/http/modules/ngx_http_headers_filter_module.c
         src/http/ngx_http_copy_filter_module.c
         src/http/modules/ngx_http_not_modified_filter_module.c
+        src/http/v2/ngx_http_v2.c
+        src/http/v2/ngx_http_v2_table.c
+        src/http/v2/ngx_http_v2_encode.c
+        src/http/v2/ngx_http_v2_huff_decode.c
+        src/http/v2/ngx_http_v2_huff_encode.c
+        src/http/v2/ngx_http_v2_module.c
         src/http/modules/ngx_http_static_module.c
         src/http/modules/ngx_http_autoindex_module.c
         src/http/modules/ngx_http_index_module.c
@@ -181,10 +194,12 @@ set(NGX_C_FILES src/core/nginx.c
         src/http/modules/ngx_http_split_clients_module.c
         src/http/modules/ngx_http_referer_module.c
         src/http/modules/ngx_http_rewrite_module.c
+        src/http/modules/ngx_http_ssl_module.c
         src/http/modules/ngx_http_proxy_module.c
         src/http/modules/ngx_http_fastcgi_module.c
         src/http/modules/ngx_http_uwsgi_module.c
         src/http/modules/ngx_http_scgi_module.c
+        src/http/modules/ngx_http_grpc_module.c
         src/http/modules/ngx_http_memcached_module.c
         src/http/modules/ngx_http_empty_gif_module.c
         src/http/modules/ngx_http_browser_module.c
@@ -197,10 +212,10 @@ set(NGX_C_FILES src/core/nginx.c
 
 include_directories(src/core src/event src/event/modules src/os/unix objs)
 
-include_directories(src/http src/http/modules)
+include_directories(src/http src/http/modules src/http/v2)
 
 set(CORE_MOD_FILES my_mod/my_test_module.c)
 
-add_executable(nginx src/core/nginx.c objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES} ${CORE_MOD_FILES})
+add_executable(nginx objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES} ${CORE_MOD_FILES})
 
-target_link_libraries(nginx dl pthread crypt pcre z)
+target_link_libraries(nginx dl pthread crypto crypt pcre z ssl)

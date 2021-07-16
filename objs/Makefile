@@ -11,7 +11,8 @@ ALL_INCS = -I src/core \
 	-I src/os/unix \
 	-I objs \
 	-I src/http \
-	-I src/http/modules
+	-I src/http/modules \
+	-I src/http/v2
 
 
 CORE_DEPS = src/core/nginx.h \
@@ -73,6 +74,7 @@ CORE_DEPS = src/core/nginx.h \
 	src/os/unix/ngx_process_cycle.h \
 	src/os/unix/ngx_linux_config.h \
 	src/os/unix/ngx_linux.h \
+	src/event/ngx_event_openssl.h \
 	src/core/ngx_regex.h \
 	objs/ngx_auto_config.h
 
@@ -93,11 +95,15 @@ HTTP_DEPS = src/http/ngx_http.h \
 	src/http/ngx_http_script.h \
 	src/http/ngx_http_upstream.h \
 	src/http/ngx_http_upstream_round_robin.h \
-	src/http/modules/ngx_http_ssi_filter_module.h
+	src/http/modules/ngx_http_ssi_filter_module.h \
+	src/http/v2/ngx_http_v2.h \
+	src/http/v2/ngx_http_v2_module.h \
+	src/http/modules/ngx_http_ssl_module.h
 
 
 HTTP_INCS = -I src/http \
-	-I src/http/modules
+	-I src/http/modules \
+	-I src/http/v2
 
 
 build:	binary modules manpage
@@ -171,6 +177,8 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/os/unix/ngx_linux_init.o \
 	objs/src/event/modules/ngx_epoll_module.o \
 	objs/src/os/unix/ngx_linux_sendfile_chain.o \
+	objs/src/event/ngx_event_openssl.o \
+	objs/src/event/ngx_event_openssl_stapling.o \
 	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
@@ -187,6 +195,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/ngx_http_write_filter_module.o \
 	objs/src/http/ngx_http_header_filter_module.o \
 	objs/src/http/modules/ngx_http_chunked_filter_module.o \
+	objs/src/http/v2/ngx_http_v2_filter_module.o \
 	objs/src/http/modules/ngx_http_range_filter_module.o \
 	objs/src/http/modules/ngx_http_gzip_filter_module.o \
 	objs/src/http/ngx_http_postpone_filter_module.o \
@@ -196,6 +205,12 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_headers_filter_module.o \
 	objs/src/http/ngx_http_copy_filter_module.o \
 	objs/src/http/modules/ngx_http_not_modified_filter_module.o \
+	objs/src/http/v2/ngx_http_v2.o \
+	objs/src/http/v2/ngx_http_v2_table.o \
+	objs/src/http/v2/ngx_http_v2_encode.o \
+	objs/src/http/v2/ngx_http_v2_huff_decode.o \
+	objs/src/http/v2/ngx_http_v2_huff_encode.o \
+	objs/src/http/v2/ngx_http_v2_module.o \
 	objs/src/http/modules/ngx_http_static_module.o \
 	objs/src/http/modules/ngx_http_autoindex_module.o \
 	objs/src/http/modules/ngx_http_index_module.o \
@@ -210,10 +225,12 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_split_clients_module.o \
 	objs/src/http/modules/ngx_http_referer_module.o \
 	objs/src/http/modules/ngx_http_rewrite_module.o \
+	objs/src/http/modules/ngx_http_ssl_module.o \
 	objs/src/http/modules/ngx_http_proxy_module.o \
 	objs/src/http/modules/ngx_http_fastcgi_module.o \
 	objs/src/http/modules/ngx_http_uwsgi_module.o \
 	objs/src/http/modules/ngx_http_scgi_module.o \
+	objs/src/http/modules/ngx_http_grpc_module.o \
 	objs/src/http/modules/ngx_http_memcached_module.o \
 	objs/src/http/modules/ngx_http_empty_gif_module.o \
 	objs/src/http/modules/ngx_http_browser_module.o \
@@ -293,6 +310,8 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/os/unix/ngx_linux_init.o \
 	objs/src/event/modules/ngx_epoll_module.o \
 	objs/src/os/unix/ngx_linux_sendfile_chain.o \
+	objs/src/event/ngx_event_openssl.o \
+	objs/src/event/ngx_event_openssl_stapling.o \
 	objs/src/core/ngx_regex.o \
 	objs/src/http/ngx_http.o \
 	objs/src/http/ngx_http_core_module.o \
@@ -309,6 +328,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/ngx_http_write_filter_module.o \
 	objs/src/http/ngx_http_header_filter_module.o \
 	objs/src/http/modules/ngx_http_chunked_filter_module.o \
+	objs/src/http/v2/ngx_http_v2_filter_module.o \
 	objs/src/http/modules/ngx_http_range_filter_module.o \
 	objs/src/http/modules/ngx_http_gzip_filter_module.o \
 	objs/src/http/ngx_http_postpone_filter_module.o \
@@ -318,6 +338,12 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_headers_filter_module.o \
 	objs/src/http/ngx_http_copy_filter_module.o \
 	objs/src/http/modules/ngx_http_not_modified_filter_module.o \
+	objs/src/http/v2/ngx_http_v2.o \
+	objs/src/http/v2/ngx_http_v2_table.o \
+	objs/src/http/v2/ngx_http_v2_encode.o \
+	objs/src/http/v2/ngx_http_v2_huff_decode.o \
+	objs/src/http/v2/ngx_http_v2_huff_encode.o \
+	objs/src/http/v2/ngx_http_v2_module.o \
 	objs/src/http/modules/ngx_http_static_module.o \
 	objs/src/http/modules/ngx_http_autoindex_module.o \
 	objs/src/http/modules/ngx_http_index_module.o \
@@ -332,10 +358,12 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_split_clients_module.o \
 	objs/src/http/modules/ngx_http_referer_module.o \
 	objs/src/http/modules/ngx_http_rewrite_module.o \
+	objs/src/http/modules/ngx_http_ssl_module.o \
 	objs/src/http/modules/ngx_http_proxy_module.o \
 	objs/src/http/modules/ngx_http_fastcgi_module.o \
 	objs/src/http/modules/ngx_http_uwsgi_module.o \
 	objs/src/http/modules/ngx_http_scgi_module.o \
+	objs/src/http/modules/ngx_http_grpc_module.o \
 	objs/src/http/modules/ngx_http_memcached_module.o \
 	objs/src/http/modules/ngx_http_empty_gif_module.o \
 	objs/src/http/modules/ngx_http_browser_module.o \
@@ -346,7 +374,7 @@ objs/nginx:	objs/src/core/nginx.o \
 	objs/src/http/modules/ngx_http_upstream_keepalive_module.o \
 	objs/src/http/modules/ngx_http_upstream_zone_module.o \
 	objs/ngx_modules.o \
-	-ldl -lpthread -lcrypt -lpcre -lz \
+	-ldl -lpthread -lcrypt -lpcre -lssl -lcrypto -ldl -lpthread -lz \
 	-Wl,-E
 	
 
@@ -829,6 +857,20 @@ objs/src/os/unix/ngx_linux_sendfile_chain.o:	$(CORE_DEPS) \
 		src/os/unix/ngx_linux_sendfile_chain.c
 
 
+objs/src/event/ngx_event_openssl.o:	$(CORE_DEPS) \
+	src/event/ngx_event_openssl.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) \
+		-o objs/src/event/ngx_event_openssl.o \
+		src/event/ngx_event_openssl.c
+
+
+objs/src/event/ngx_event_openssl_stapling.o:	$(CORE_DEPS) \
+	src/event/ngx_event_openssl_stapling.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) \
+		-o objs/src/event/ngx_event_openssl_stapling.o \
+		src/event/ngx_event_openssl_stapling.c
+
+
 objs/src/core/ngx_regex.o:	$(CORE_DEPS) \
 	src/core/ngx_regex.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) \
@@ -941,6 +983,13 @@ objs/src/http/modules/ngx_http_chunked_filter_module.o:	$(CORE_DEPS) $(HTTP_DEPS
 		src/http/modules/ngx_http_chunked_filter_module.c
 
 
+objs/src/http/v2/ngx_http_v2_filter_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_filter_module.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_filter_module.o \
+		src/http/v2/ngx_http_v2_filter_module.c
+
+
 objs/src/http/modules/ngx_http_range_filter_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
 	src/http/modules/ngx_http_range_filter_module.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
@@ -1002,6 +1051,48 @@ objs/src/http/modules/ngx_http_not_modified_filter_module.o:	$(CORE_DEPS) $(HTTP
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
 		-o objs/src/http/modules/ngx_http_not_modified_filter_module.o \
 		src/http/modules/ngx_http_not_modified_filter_module.c
+
+
+objs/src/http/v2/ngx_http_v2.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2.o \
+		src/http/v2/ngx_http_v2.c
+
+
+objs/src/http/v2/ngx_http_v2_table.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_table.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_table.o \
+		src/http/v2/ngx_http_v2_table.c
+
+
+objs/src/http/v2/ngx_http_v2_encode.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_encode.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_encode.o \
+		src/http/v2/ngx_http_v2_encode.c
+
+
+objs/src/http/v2/ngx_http_v2_huff_decode.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_huff_decode.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_huff_decode.o \
+		src/http/v2/ngx_http_v2_huff_decode.c
+
+
+objs/src/http/v2/ngx_http_v2_huff_encode.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_huff_encode.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_huff_encode.o \
+		src/http/v2/ngx_http_v2_huff_encode.c
+
+
+objs/src/http/v2/ngx_http_v2_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/v2/ngx_http_v2_module.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/v2/ngx_http_v2_module.o \
+		src/http/v2/ngx_http_v2_module.c
 
 
 objs/src/http/modules/ngx_http_static_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
@@ -1102,6 +1193,13 @@ objs/src/http/modules/ngx_http_rewrite_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
 		src/http/modules/ngx_http_rewrite_module.c
 
 
+objs/src/http/modules/ngx_http_ssl_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/modules/ngx_http_ssl_module.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/modules/ngx_http_ssl_module.o \
+		src/http/modules/ngx_http_ssl_module.c
+
+
 objs/src/http/modules/ngx_http_proxy_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
 	src/http/modules/ngx_http_proxy_module.c
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
@@ -1128,6 +1226,13 @@ objs/src/http/modules/ngx_http_scgi_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
 	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
 		-o objs/src/http/modules/ngx_http_scgi_module.o \
 		src/http/modules/ngx_http_scgi_module.c
+
+
+objs/src/http/modules/ngx_http_grpc_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
+	src/http/modules/ngx_http_grpc_module.c
+	$(CC) -c $(CFLAGS) $(CORE_INCS) $(HTTP_INCS) \
+		-o objs/src/http/modules/ngx_http_grpc_module.o \
+		src/http/modules/ngx_http_grpc_module.c
 
 
 objs/src/http/modules/ngx_http_memcached_module.o:	$(CORE_DEPS) $(HTTP_DEPS) \
@@ -1196,64 +1301,64 @@ objs/src/http/modules/ngx_http_upstream_zone_module.o:	$(CORE_DEPS) $(HTTP_DEPS)
 manpage:	objs/nginx.8
 
 objs/nginx.8:	docs/man/nginx.8 objs/ngx_auto_config.h
-	sed -e "s|%%PREFIX%%|/usr/local/nginx|" \
-		-e "s|%%PID_PATH%%|/usr/local/nginx/logs/nginx.pid|" \
-		-e "s|%%CONF_PATH%%|/usr/local/nginx/conf/nginx.conf|" \
-		-e "s|%%ERROR_LOG_PATH%%|/usr/local/nginx/logs/error.log|" \
+	sed -e "s|%%PREFIX%%|../run|" \
+		-e "s|%%PID_PATH%%|../run/logs/nginx.pid|" \
+		-e "s|%%CONF_PATH%%|../run/conf/nginx.conf|" \
+		-e "s|%%ERROR_LOG_PATH%%|../run/logs/error.log|" \
 		< docs/man/nginx.8 > $@
 
 install:	build 
-	test -d '$(DESTDIR)/usr/local/nginx' || mkdir -p '$(DESTDIR)/usr/local/nginx'
+	test -d '$(DESTDIR)../run' || mkdir -p '$(DESTDIR)../run'
 
-	test -d '$(DESTDIR)/usr/local/nginx/sbin' \
-		|| mkdir -p '$(DESTDIR)/usr/local/nginx/sbin'
-	test ! -f '$(DESTDIR)/usr/local/nginx/sbin/nginx' \
-		|| mv '$(DESTDIR)/usr/local/nginx/sbin/nginx' \
-			'$(DESTDIR)/usr/local/nginx/sbin/nginx.old'
-	cp objs/nginx '$(DESTDIR)/usr/local/nginx/sbin/nginx'
+	test -d '$(DESTDIR)../run/sbin' \
+		|| mkdir -p '$(DESTDIR)../run/sbin'
+	test ! -f '$(DESTDIR)../run/sbin/nginx' \
+		|| mv '$(DESTDIR)../run/sbin/nginx' \
+			'$(DESTDIR)../run/sbin/nginx.old'
+	cp objs/nginx '$(DESTDIR)../run/sbin/nginx'
 
-	test -d '$(DESTDIR)/usr/local/nginx/conf' \
-		|| mkdir -p '$(DESTDIR)/usr/local/nginx/conf'
+	test -d '$(DESTDIR)../run/conf' \
+		|| mkdir -p '$(DESTDIR)../run/conf'
 
-	cp conf/koi-win '$(DESTDIR)/usr/local/nginx/conf'
-	cp conf/koi-utf '$(DESTDIR)/usr/local/nginx/conf'
-	cp conf/win-utf '$(DESTDIR)/usr/local/nginx/conf'
+	cp conf/koi-win '$(DESTDIR)../run/conf'
+	cp conf/koi-utf '$(DESTDIR)../run/conf'
+	cp conf/win-utf '$(DESTDIR)../run/conf'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/mime.types' \
-		|| cp conf/mime.types '$(DESTDIR)/usr/local/nginx/conf'
-	cp conf/mime.types '$(DESTDIR)/usr/local/nginx/conf/mime.types.default'
+	test -f '$(DESTDIR)../run/conf/mime.types' \
+		|| cp conf/mime.types '$(DESTDIR)../run/conf'
+	cp conf/mime.types '$(DESTDIR)../run/conf/mime.types.default'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/fastcgi_params' \
-		|| cp conf/fastcgi_params '$(DESTDIR)/usr/local/nginx/conf'
+	test -f '$(DESTDIR)../run/conf/fastcgi_params' \
+		|| cp conf/fastcgi_params '$(DESTDIR)../run/conf'
 	cp conf/fastcgi_params \
-		'$(DESTDIR)/usr/local/nginx/conf/fastcgi_params.default'
+		'$(DESTDIR)../run/conf/fastcgi_params.default'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/fastcgi.conf' \
-		|| cp conf/fastcgi.conf '$(DESTDIR)/usr/local/nginx/conf'
-	cp conf/fastcgi.conf '$(DESTDIR)/usr/local/nginx/conf/fastcgi.conf.default'
+	test -f '$(DESTDIR)../run/conf/fastcgi.conf' \
+		|| cp conf/fastcgi.conf '$(DESTDIR)../run/conf'
+	cp conf/fastcgi.conf '$(DESTDIR)../run/conf/fastcgi.conf.default'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/uwsgi_params' \
-		|| cp conf/uwsgi_params '$(DESTDIR)/usr/local/nginx/conf'
+	test -f '$(DESTDIR)../run/conf/uwsgi_params' \
+		|| cp conf/uwsgi_params '$(DESTDIR)../run/conf'
 	cp conf/uwsgi_params \
-		'$(DESTDIR)/usr/local/nginx/conf/uwsgi_params.default'
+		'$(DESTDIR)../run/conf/uwsgi_params.default'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/scgi_params' \
-		|| cp conf/scgi_params '$(DESTDIR)/usr/local/nginx/conf'
+	test -f '$(DESTDIR)../run/conf/scgi_params' \
+		|| cp conf/scgi_params '$(DESTDIR)../run/conf'
 	cp conf/scgi_params \
-		'$(DESTDIR)/usr/local/nginx/conf/scgi_params.default'
+		'$(DESTDIR)../run/conf/scgi_params.default'
 
-	test -f '$(DESTDIR)/usr/local/nginx/conf/nginx.conf' \
-		|| cp conf/nginx.conf '$(DESTDIR)/usr/local/nginx/conf/nginx.conf'
-	cp conf/nginx.conf '$(DESTDIR)/usr/local/nginx/conf/nginx.conf.default'
+	test -f '$(DESTDIR)../run/conf/nginx.conf' \
+		|| cp conf/nginx.conf '$(DESTDIR)../run/conf/nginx.conf'
+	cp conf/nginx.conf '$(DESTDIR)../run/conf/nginx.conf.default'
 
-	test -d '$(DESTDIR)/usr/local/nginx/logs' \
-		|| mkdir -p '$(DESTDIR)/usr/local/nginx/logs'
+	test -d '$(DESTDIR)../run/logs' \
+		|| mkdir -p '$(DESTDIR)../run/logs'
 
-	test -d '$(DESTDIR)/usr/local/nginx/logs' \
-		|| mkdir -p '$(DESTDIR)/usr/local/nginx/logs'
+	test -d '$(DESTDIR)../run/logs' \
+		|| mkdir -p '$(DESTDIR)../run/logs'
 
-	test -d '$(DESTDIR)/usr/local/nginx/html' \
-		|| cp -R docs/html '$(DESTDIR)/usr/local/nginx'
+	test -d '$(DESTDIR)../run/html' \
+		|| cp -R docs/html '$(DESTDIR)../run'
 
-	test -d '$(DESTDIR)/usr/local/nginx/logs' \
-		|| mkdir -p '$(DESTDIR)/usr/local/nginx/logs'
+	test -d '$(DESTDIR)../run/logs' \
+		|| mkdir -p '$(DESTDIR)../run/logs'

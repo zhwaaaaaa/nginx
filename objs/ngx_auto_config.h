@@ -1,7 +1,12 @@
 #define NGX_CONFIGURE ""
 
+#ifndef NGX_DEBUG
+#define NGX_DEBUG  1
+#endif
+
+
 #ifndef NGX_COMPILER
-#define NGX_COMPILER  "gcc 8.3.0 (Ubuntu 8.3.0-26ubuntu1~18.04) "
+#define NGX_COMPILER  "gcc 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) "
 #endif
 
 
@@ -373,6 +378,16 @@
 #endif
 
 
+#ifndef NGX_HTTP_V2
+#define NGX_HTTP_V2  1
+#endif
+
+
+#ifndef NGX_HTTP_HEADERS
+#define NGX_HTTP_HEADERS  1
+#endif
+
+
 #ifndef NGX_CRYPT
 #define NGX_CRYPT  1
 #endif
@@ -380,6 +395,11 @@
 
 #ifndef NGX_HTTP_X_FORWARDED_FOR
 #define NGX_HTTP_X_FORWARDED_FOR  1
+#endif
+
+
+#ifndef NGX_HTTP_SSL
+#define NGX_HTTP_SSL  1
 #endif
 
 
@@ -403,18 +423,28 @@
 #endif
 
 
+#ifndef NGX_OPENSSL
+#define NGX_OPENSSL  1
+#endif
+
+
+#ifndef NGX_SSL
+#define NGX_SSL  1
+#endif
+
+
 #ifndef NGX_ZLIB
 #define NGX_ZLIB  1
 #endif
 
 
 #ifndef NGX_PREFIX
-#define NGX_PREFIX  "../"
+#define NGX_PREFIX  ""
 #endif
 
 
 #ifndef NGX_CONF_PREFIX
-#define NGX_CONF_PREFIX  "conf/"
+#define NGX_CONF_PREFIX  "../"
 #endif
 
 
