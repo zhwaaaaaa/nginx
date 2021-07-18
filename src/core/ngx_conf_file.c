@@ -153,7 +153,12 @@ ngx_conf_add_dump(ngx_conf_t *cf, ngx_str_t *filename)
     return NGX_OK;
 }
 
-
+/**
+ * 传入filename 表示要开始解析新的配置文件，文件结束返回， 不传入filename 表示要解析新的 块内容{}，块结束返回
+ * @param cf
+ * @param filename
+ * @return
+ */
 char *
 ngx_conf_parse(ngx_conf_t *cf, ngx_str_t *filename)
 {
@@ -419,13 +424,13 @@ ngx_conf_handler(ngx_conf_t *cf, ngx_int_t last)
 
             if (!(cmd->type & NGX_CONF_ANY)) {
 
-                if (cmd->type & NGX_CONF_FLAG) {
+                if (cmd->type & NGX_CONF_FLAG) { // 表示这里是个bool 值设置
 
                     if (cf->args->nelts != 2) {
                         goto invalid;
                     }
 
-                } else if (cmd->type & NGX_CONF_1MORE) {
+                } else if (cmd->type & NGX_CONF_1MORE) {// 至少有2个参数
 
                     if (cf->args->nelts < 2) {
                         goto invalid;

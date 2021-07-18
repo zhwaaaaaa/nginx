@@ -79,6 +79,12 @@ set(NGX_HTTP_FILES src/http/ngx_http.h
         src/http/v2/ngx_http_v2_module.h
         src/http/modules/ngx_http_ssl_module.h)
 
+set(N_C_FILES
+        my_modules/nhttp/so_http_bind.c
+        )
+set(N_H_FILES my_modules/nhttp/so_http_bind.h
+        )
+
 set(NGX_C_FILES src/core/nginx.c
         src/core/ngx_log.c
         src/core/ngx_palloc.c
@@ -212,10 +218,10 @@ set(NGX_C_FILES src/core/nginx.c
 
 include_directories(src/core src/event src/event/modules src/os/unix objs)
 
-include_directories(src/http src/http/modules src/http/v2)
+include_directories(src/http src/http/modules src/http/v2 my_modules/nhttp)
 
 set(CORE_MOD_FILES my_mod/my_test_module.c)
 
-add_executable(nginx objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES} ${CORE_MOD_FILES})
+add_executable(nginx objs/ngx_modules.c ${NGX_C_FILES} ${NGX_CORE_DEPS} ${NGX_HTTP_FILES} ${CORE_MOD_FILES} ${N_H_FILES} ${N_C_FILES})
 
 target_link_libraries(nginx dl pthread crypto crypt pcre z ssl)
